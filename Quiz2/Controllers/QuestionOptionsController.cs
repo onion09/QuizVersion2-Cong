@@ -29,37 +29,31 @@ namespace Quiz2.Controllers
         {
             string sessionId = _questionDao.GetQuestionsByCategory(categoryId);
             var questionLog = _questionDao.GetQuesitonLogBySesssionIdQuesInsessionId(sessionId, 1);
-
-            //QuestionLog quesLog = _logDao.PostNewQuestionLog(sessionId, currentQuestion.QuestionId);
-            //int quesLogId = quesLog.QuestionLogId;
-            //this._questionLogMap.Add(currentIndex, quesLogId);
-            //HttpContext.Session.SetInt32("CurrentQuestionIndex", currentIndex);
-            return View("QuestionAndOptions", questionLog);
-
+            return View("Quiz", questionLog);
+        }
+        [HttpPost("[action]")]
+        public IActionResult DisplayNextQuestion(string sessionId, int quesLogId, int curIndex)
+        {
+            curIndex++;
+            if (curIndex > 5)
+            {
+                curIndex = 5;
+            }
+            var currentLog = _questionDao.GetQuesitonLogBySesssionIdQuesInsessionId(sessionId, curIndex);
+            return View("Quiz", currentLog);
         }
 
-        //public IActionResult NextQuestion()
-        //{
-        //    currentIndex = HttpContext.Session.GetInt32("CurrentQuestionIndex") ?? 0;
-        //    currentIndex++;
-        //    if(currentIndex >= _questions.Count )
-        //    {
-        //        currentIndex = 0;
-        //    }
-        //    HttpContext.Session.SetInt32("CurrentQuestionIndex", currentIndex);
-        //    var currentQuestion = _questions[currentIndex];
-        //    return View("QuestionAndOptions", currentQuestion);
-        //}
-        //public IActionResult PrevQuestion()
-        //{
-        //    currentIndex--; 
-        //    if(currentIndex< 0 ) 
-        //    {
-        //        currentIndex = 0;
-        //    }
-        //    var currentQuestion = _questions[currentIndex];
-        //    return View("QuestionAndOptions", currentQuestion);
-        //}
+        [HttpPost("[action]")]
+        public IActionResult DisplayPrevQuestion(string sessionId, int quesLogId, int curIndex)
+        {
+            curIndex--;
+            if (curIndex < 1)
+            {
+                curIndex = 1;
+            }
+            var currentLog = _questionDao.GetQuesitonLogBySesssionIdQuesInsessionId(sessionId, curIndex);
+            return View("Quiz", currentLog);
+        }
         [HttpGet("/getoptions/{quesId}")]
         public ActionResult<List<Option>> GetOptionsByQuestionId(int quesId)
         {
@@ -68,12 +62,12 @@ namespace Quiz2.Controllers
         }
 
         [HttpPost("[action]")]
-        public IActionResult SubmitAnswer(string answer, string sessionId, int quesLogId, int curIndex )
+        public async Task<IActionResult> SubmitAnswer(string answer, string sessionId, int quesLogId, int curIndex )
         {
             _questionDao.UpdateQuestionLog(quesLogId, answer);
             var questionLog = _questionDao.GetQuesitonLogBySesssionIdQuesInsessionId(sessionId, curIndex);
 
-            return View("QuestionAndOptions", questionLog);
+            return View("Quiz", questionLog);
         }
     }
 }

@@ -35,7 +35,7 @@ namespace Quiz2.DAO
         }
         public QuestionLog GetQuesitonLogBySesssionIdQuesInsessionId(string sesssionId,int currIndex)
         {
-            var questionLog = _dbContext.QuestionLogs.Where(ql => ql.SessionId == sesssionId && ql.QuesionInSessionId == currIndex)
+            var questionLog = _dbContext.QuestionLogs.Include(ql =>ql.Question.Options).Where(ql => ql.SessionId == sesssionId && ql.QuesionInSessionId == currIndex)
                 .FirstOrDefault();
             //var question = _dbContext.Questions.Find(quesId);
             return questionLog;

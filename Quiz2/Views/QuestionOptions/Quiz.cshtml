@@ -2,8 +2,8 @@
 @model QuestionLog
 @{
 }
-@using (Html.BeginForm("FirstQuestion", "QuestionOptions", FormMethod.Get))
-{
+@*@using (Html.BeginForm("FirstQuestion", "QuestionOptions", FormMethod.Get))
+{*@
     <div id="questionContainer">
         <h2>@Model.Question.QuestionId, @Model.Question.QuesContent</h2>
         <ul>
@@ -13,7 +13,7 @@
              }
         </ul>
      </div>
-}
+@*}*@
 
 <p>Current answer is @Model.Answer</p>
 
@@ -24,9 +24,19 @@
         <input type="hidden" name="quesLogId" value="@Model.QuestionLogId" />
         <input type="hidden" name="sessionId" value="@Model.SessionId" />
         <input type="hidden" name="curIndex" value="@Model.QuesionInSessionId" />
-
-
     </div>
     <button type="submit" class="btn btn-primary" style="width:150px">Update Answer</button>
 </form>
 
+<form method="post" asp-action="DisplayPrevQuestion">
+    <input type="hidden" name="quesLogId" value="@Model.QuestionLogId" />
+    <input type="hidden" name="sessionId" value="@Model.SessionId" />
+    <input type="hidden" name="curIndex" value="@Model.QuesionInSessionId" />
+    <button type="submit">Prev</button>
+</form>
+<form method="post" asp-action="DisplayNextQuestion">
+    <input type="hidden" name="quesLogId" value="@Model.QuestionLogId" />
+    <input type="hidden" name="sessionId" value="@Model.SessionId" />
+    <input type="hidden" name="curIndex" value="@Model.QuesionInSessionId" />
+    <button type="submit">Next</button>
+</form>
