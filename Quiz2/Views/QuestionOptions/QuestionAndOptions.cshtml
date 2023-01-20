@@ -1,0 +1,32 @@
+﻿@using Quiz2.Models.DBEntities;
+@model QuestionLog
+@{
+}
+@using (Html.BeginForm("FirstQuestion", "QuestionOptions", FormMethod.Get))
+{
+    <div id="questionContainer">
+        <h2>@Model.Question.QuestionId, @Model.Question.QuesContent</h2>
+        <ul>
+             @foreach (var option in Model.Question.Options)
+             {
+                 <p>@option.OptionValue </p>
+             }
+        </ul>
+     </div>
+}
+
+<p>Current answer is @Model.Answer</p>
+
+<form method="post" asp-action="SubmitAnswer">
+    <div class="mb-3">
+        <label asp-for="Answer"></label>
+        <input asp-for="Answer" class="form-control" />
+        <input type="hidden" name="quesLogId" value="@Model.QuestionLogId" />
+        <input type="hidden" name="sessionId" value="@Model.SessionId" />
+        <input type="hidden" name="curIndex" value="@Model.QuesionInSessionId" />
+
+
+    </div>
+    <button type="submit" class="btn btn-primary" style="width:150px">Update Answer</button>
+</form>
+

@@ -12,8 +12,11 @@ namespace Quiz2
             // Add services to the container.
             builder.Services.AddControllers();
             builder.Services.AddControllersWithViews();
+            builder.Services.AddSession();
+            builder.Services.AddTransient<QuestionDao>();
+            builder.Services.AddTransient<LogDao>();
             builder.Services.AddDbContext<ApplicationDBContext>();
-            builder.Services.AddTransient<QuestionDaocs>();
+            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -28,13 +31,13 @@ namespace Quiz2
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseSession();
 
             app.UseAuthorization();
-
+            
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
-
             app.Run();
         }
     }

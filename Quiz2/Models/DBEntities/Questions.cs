@@ -1,7 +1,7 @@
 ﻿using Microsoft.Identity.Client;
-using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Quiz2.Models.DBEntities
 {
@@ -21,23 +21,29 @@ namespace Quiz2.Models.DBEntities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int QuestionsId { get; set;}
-        public int CategoriesId { get; set; }   
+        public int QuestionId { get; set;}
+        [NotMapped]
+        public int QuesionInSessionId { get; set;}
+        public int CategoryId { get; set; }   
         public string QuesContent { get; set; }
         [InverseProperty("Question")]
         public List<Option> Options { get; set; }
 
+        //[ForeignKey("QuestionLogId")]
+        //[JsonIgnore]
+        //public List<QuestionLog> questionLogs { get; set; } 
     }
 
-    [Table("Option")]
+    [Table("Options")]
     public class Option
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int OptionId { get; set; }
-        public int QusetionId { get; set; } 
+        public int QuestionId { get; set; } 
         public string OptionValue { get; set; }
         public bool ShouldChoose { get; set; }
+
 
         [ForeignKey("QuestionId")]
         [JsonIgnore]
