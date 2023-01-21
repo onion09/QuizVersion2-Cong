@@ -40,3 +40,25 @@
     <input type="hidden" name="curIndex" value="@Model.QuesionInSessionId" />
     <button type="submit">Next</button>
 </form>
+
+<button id="myButton" type="button" onclick="confirmAction()">Submit Quiz </button>
+
+<script>
+    function confirmAction() {
+        var sessionId = '@ViewBag.SessionId';
+        var finished = '@ViewBag.Finished'
+        console.log(finished)
+        if (finished == "0") {
+            var result = confirm("Are you sure you want to submit all?");
+            if (result) {
+                //OK button was pressed
+                window.location.href = '@Url.Action("DisplayQuizResult", "QuizController")' + '?sessionId=' + String(sessionId);
+            } else {
+                //Cancel button was pressed
+            }
+        }
+        else {
+            window.location.href = '@Url.Action("DisplayQuizResult", "QuizController")' + '?sessionId=' + String(sessionId);
+        }
+    }
+</script>

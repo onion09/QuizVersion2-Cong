@@ -49,14 +49,12 @@ namespace Quiz2.Models.DBEntities
         public SessionLog(int CategoryId) 
         {
             this.StartTime = DateTime.Now;
-            this.EndTime = DateTime.MinValue;
             this.SessionId = Guid.NewGuid().ToString();
             this.CategoryId = CategoryId;
         }
         public SessionLog()
         {
             this.StartTime = DateTime.MinValue;
-            this.EndTime = DateTime.MinValue;
             this.SessionId = Guid.NewGuid().ToString();
             this.CategoryId = 100;
         }

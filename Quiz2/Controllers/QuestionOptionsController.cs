@@ -29,8 +29,15 @@ namespace Quiz2.Controllers
         {
             string sessionId = _questionDao.GetQuestionsByCategory(categoryId);
             var questionLog = _questionDao.GetQuesitonLogBySesssionIdQuesInsessionId(sessionId, 1);
+            LoadViewBag(sessionId);
             return View("Quiz", questionLog);
         }
+        private void LoadViewBag(string sessionId)
+        {
+            ViewBag.Finished = _questionDao.IsCompleted(sessionId) ? "1" : "0";
+            ViewBag.SessionId = sessionId;
+        }
+
         [HttpPost("[action]")]
         public IActionResult DisplayNextQuestion(string sessionId, int quesLogId, int curIndex)
         {
@@ -40,6 +47,7 @@ namespace Quiz2.Controllers
                 curIndex = 5;
             }
             var currentLog = _questionDao.GetQuesitonLogBySesssionIdQuesInsessionId(sessionId, curIndex);
+            LoadViewBag(sessionId);
             return View("Quiz", currentLog);
         }
 
@@ -52,6 +60,7 @@ namespace Quiz2.Controllers
                 curIndex = 1;
             }
             var currentLog = _questionDao.GetQuesitonLogBySesssionIdQuesInsessionId(sessionId, curIndex);
+            this.LoadViewBag(sessionId);
             return View("Quiz", currentLog);
         }
         [HttpGet("/getoptions/{quesId}")]
@@ -69,5 +78,16 @@ namespace Quiz2.Controllers
 
             return View("Quiz", questionLog);
         }
+
+        [HttpGet("[action]")]
+        public IActionResult DisplayQuizResult(string sessionId)
+        {
+            int score = _questionDao.GetScore(sessionId);
+            //string endTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            _questionDao.UpdateSession(sessionId, DateTime.Now, score);
+            Result result = _questionDao.ReturnResult(sessionId);
+            return View("DisplayQuizResult", result);
+        }
+
     }
 }

@@ -74,12 +74,11 @@ namespace Quiz2.DAO
             _dbContext.SaveChanges();
             return newSession.SessionId;
         }
-        public void UpdateSession(int SessionId, DateTime? StartTime, DateTime? EndTime, int? score)
+        public void UpdateSession(string SessionId, DateTime? EndTime, int? score)
         {
-            var session = _dbContext.SessionLogs.Find(SessionId);
+            var session = _dbContext.SessionLogs.Where(s=> s.SessionId == SessionId).FirstOrDefault();
             if (session != null)
             {
-                session.StartTime = StartTime ?? session.StartTime;
                 session.EndTime = EndTime ?? session.EndTime;
                 session.Score = score ?? session.Score;
             }
@@ -101,6 +100,84 @@ namespace Quiz2.DAO
                 questionLog.Answer = answer ?? questionLog.Answer;
             }
             _dbContext.SaveChanges();
+        }
+
+        public bool IsCompleted(string sessionId)
+        {
+            var logs = _dbContext.QuestionLogs.Where(ql => ql.SessionId == sessionId).ToList();
+            foreach(var log in logs)
+            {
+                if (log.Answer == null)
+                return false;
+            }
+            return true;
+        }
+
+        public int GetScore(string sessionId)
+        {
+            var results = new List<bool>();
+            var logs =  _dbContext.QuestionLogs.Include(l => l.Question.Options).Where(ql => ql.SessionId == sessionId).ToList();
+            foreach(var log in logs)
+            {
+                if (log.Answer == null || log.Answer.Length != log.Question.Options.Count )
+                {
+                    results.Add(false);
+                    continue;
+                }
+                bool questionRes = true;
+
+                for (int i = 0; i< log.Question.Options.Count; i++) 
+                {
+                    bool actual = log.Answer[i] == '1';
+                    bool expected = log.Question.Options[i].ShouldChoose;
+                    if(actual != expected)
+                    {
+                        questionRes = false;
+                        results.Add(questionRes);
+                        break;
+                    }
+                }
+                results.Add(true);
+            }
+            int score = results.Count(item => item);
+            return score;
+        }
+
+        public SessionLog GetSessionById(string sessionId)
+        {
+            var session = _dbContext.SessionLogs.
+                Include(s => s.QuestionLogs)
+                .Where(s => s.SessionId == sessionId).FirstOrDefault();
+            return session;
+        }
+        public Dictionary<int, QuestionResult> GetQuesresultsBySessionId(string sessionId)
+        {
+            var resultMap = new Dictionary<int, QuestionResult>();  
+            var questionLogs = _dbContext.QuestionLogs.
+                Where(ql => ql.SessionId == sessionId).ToList();
+            foreach(var log in questionLogs)
+            {
+                var index = log.QuesionInSessionId;
+                var question = _dbContext.Questions.Include(q => q.Options).Where(q => q.QuestionId == log.QuestionId).FirstOrDefault();
+                var curQuesRes = new QuestionResult { Answer = log.Answer, Question = question };
+                resultMap.Add(index, curQuesRes);
+            }
+            return resultMap;
+        }
+        public Result ReturnResult(string sessionId)
+        {
+            var sessionlog = GetSessionById(sessionId);
+            string passCon =  sessionlog.Score >= 3 ? "QUIZ PASSED" : "QUIZ DID NOT PASS";
+            var resultMap = GetQuesresultsBySessionId(sessionId);
+            string categaryName = _dbContext.Categories.Find(sessionlog.CategoryId).CategoryName;
+            Result result = new Result
+            {
+                sessionLog = sessionlog,
+                questionResultMap = resultMap,
+                PassContiditon = passCon,
+                QuizCategory= categaryName,
+            };
+            return result;
         }
 
     }
