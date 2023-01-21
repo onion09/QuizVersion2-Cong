@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Quiz2.Models.DBEntities;
+using System.Diagnostics.CodeAnalysis;
+using System.Net;
 
 namespace Quiz2.DAO
 {
@@ -30,8 +32,6 @@ namespace Quiz2.DAO
                 return sessionId;
 
             }
-
-
         }
         public QuestionLog GetQuesitonLogBySesssionIdQuesInsessionId(string sesssionId,int currIndex)
         {
@@ -54,7 +54,7 @@ namespace Quiz2.DAO
             }
         }
 
-        public void AddQuestions(int CategoryId, string QuesContent)
+        public void AddQuestion(int CategoryId, string QuesContent)
         {
             var newQues = new Question { CategoryId = CategoryId, QuesContent = QuesContent };
             _dbContext.Questions.Add(newQues);
@@ -112,32 +112,27 @@ namespace Quiz2.DAO
             }
             return true;
         }
-
+        private bool IsCorrect (string answer, Question question)
+        {
+            if(answer == null || answer.Length != question.Options.Count) return false;
+            bool questRes = true;
+            for(int i = 0; i<question.Options.Count; i++)
+            {
+                bool actual = answer[i] == '1';
+                bool expected = question.Options[i].ShouldChoose;
+                if(actual != expected) { return false; }
+            }
+            return true;
+        }
         public int GetScore(string sessionId)
         {
             var results = new List<bool>();
             var logs =  _dbContext.QuestionLogs.Include(l => l.Question.Options).Where(ql => ql.SessionId == sessionId).ToList();
             foreach(var log in logs)
             {
-                if (log.Answer == null || log.Answer.Length != log.Question.Options.Count )
-                {
-                    results.Add(false);
-                    continue;
-                }
-                bool questionRes = true;
-
-                for (int i = 0; i< log.Question.Options.Count; i++) 
-                {
-                    bool actual = log.Answer[i] == '1';
-                    bool expected = log.Question.Options[i].ShouldChoose;
-                    if(actual != expected)
-                    {
-                        questionRes = false;
-                        results.Add(questionRes);
-                        break;
-                    }
-                }
-                results.Add(true);
+                string answer = log.Answer;
+                Question question = log.Question;
+                results.Add(IsCorrect(answer, question));
             }
             int score = results.Count(item => item);
             return score;
@@ -145,8 +140,7 @@ namespace Quiz2.DAO
 
         public SessionLog GetSessionById(string sessionId)
         {
-            var session = _dbContext.SessionLogs.
-                Include(s => s.QuestionLogs)
+            var session = _dbContext.SessionLogs
                 .Where(s => s.SessionId == sessionId).FirstOrDefault();
             return session;
         }
@@ -159,7 +153,8 @@ namespace Quiz2.DAO
             {
                 var index = log.QuesionInSessionId;
                 var question = _dbContext.Questions.Include(q => q.Options).Where(q => q.QuestionId == log.QuestionId).FirstOrDefault();
-                var curQuesRes = new QuestionResult { Answer = log.Answer, Question = question };
+                string isCorrect = IsCorrect(log.Answer, question) == true ? "Correct" : "Wrong";
+                var curQuesRes = new QuestionResult { Answer = log.Answer, Question = question, IsCorrect = isCorrect };
                 resultMap.Add(index, curQuesRes);
             }
             return resultMap;
@@ -169,6 +164,11 @@ namespace Quiz2.DAO
             var sessionlog = GetSessionById(sessionId);
             string passCon =  sessionlog.Score >= 3 ? "QUIZ PASSED" : "QUIZ DID NOT PASS";
             var resultMap = GetQuesresultsBySessionId(sessionId);
+            List<int> quesIds=new List<int>();
+            foreach(var item in resultMap)
+            {
+                quesIds.Add(item.Value.Question.QuestionId);
+            }
             string categaryName = _dbContext.Categories.Find(sessionlog.CategoryId).CategoryName;
             Result result = new Result
             {
@@ -176,8 +176,25 @@ namespace Quiz2.DAO
                 questionResultMap = resultMap,
                 PassContiditon = passCon,
                 QuizCategory= categaryName,
+                QuesId= quesIds,
             };
             return result;
+        }
+
+        public List<SessionRow> GetAllSessions()
+        {
+            var sessionRows = (from sl in _dbContext.SessionLogs
+                               join c in _dbContext.Categories
+                               on sl.CategoryId equals c.CategoryId
+                               select new SessionRow
+                               {
+                                   TakenDate = sl.StartTime,
+                                   Category = c.CategoryName,
+                                   NumberOfQuestion = sl.QuestionLogs.Count,
+                                   Score= sl.Score,
+                                   sessionId = sl.SessionId,
+                               }).ToList();
+            return sessionRows;
         }
 
     }

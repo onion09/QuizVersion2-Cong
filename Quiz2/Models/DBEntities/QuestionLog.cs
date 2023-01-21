@@ -35,9 +35,9 @@ namespace Quiz2.Models.DBEntities
         [Key]
         public string SessionId { get; set; }
         public int CategoryId { get; set; }
-        public string UserId { get; set; }
+        public string? UserId { get; set; }
         public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
+        public DateTime? EndTime { get; set; }
         public int Score { get; set; }
         [ForeignKey("CategoryId")]
         public virtual Category Category { get; set; }
