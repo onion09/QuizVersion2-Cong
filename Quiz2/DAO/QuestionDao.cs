@@ -15,7 +15,7 @@ namespace Quiz2.DAO
         }
 
         //Get random questions- options list based on categoryId. 
-        public string GetQuestionsByCategory(int categoryId)
+        public string BuildQuestionsByCategory(int categoryId)
         {
             using(IDbContextTransaction transaction = _dbContext.Database.BeginTransaction())
             {
@@ -52,6 +52,17 @@ namespace Quiz2.DAO
                 questions[k] = questions[n];
                 questions[n] = temp;
             }
+        }
+        public List<Question> GetAllQuestions()
+        {
+            var questions = _dbContext.Questions.Include(q => q.Options).OrderBy(q=> q.QuestionId).ToList();
+            return questions;
+        }
+        public List<Question> GetQuestionsByCategoryId(int categoryId)
+        {
+            var questions = _dbContext.Questions.
+                Include(q => q.Options).Where(c => c.CategoryId == categoryId).OrderBy(q =>q.QuestionId).ToList();
+            return questions;
         }
 
         public void AddQuestion(int CategoryId, string QuesContent)
@@ -191,9 +202,10 @@ namespace Quiz2.DAO
                                    TakenDate = sl.StartTime,
                                    Category = c.CategoryName,
                                    NumberOfQuestion = sl.QuestionLogs.Count,
-                                   Score= sl.Score,
+                                   Score = sl.Score,
                                    sessionId = sl.SessionId,
                                }).ToList();
+            sessionRows.OrderBy(s=>s.TakenDate).ToList();
             return sessionRows;
         }
 

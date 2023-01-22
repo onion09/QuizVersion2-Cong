@@ -1,0 +1,66 @@
+﻿@using Quiz2.Models.DBEntities;
+<script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+@model List<Question>
+
+<h1>Questions</h1>
+
+<table id="myTable" class=" table table-bordered table-striped display" style="width：100%">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Category</th>
+            <th>Question</th>
+            <th>EditQ</th>
+            <th>DeleteQ</th>
+            <th>AddO</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var result in Model)
+        {
+                <tr>
+                    <td rowspan="@result.Options.Count()"width ="2%">@result.QuestionId</td>
+                    <td rowspan="@result.Options.Count()" width="5%">@result.CategoryId</td>
+                    <td rowspan="@result.Options.Count()"width="25%">@result.QuesContent</td>
+                    <td rowspan="@result.Options.Count()">
+                            <div >
+                                       <a asp-controller="Admin" asp-action="DisplayQuizResult" asp-route-sessionId="@result.QuestionId">EditQ</a>
+                             </div>
+                    </td>
+                    <td rowspan="@result.Options.Count()">
+                            <div >
+                                       <a asp-controller="Admin" asp-action="DisplayQuizResult" asp-route-sessionId="@result.QuestionId">DeleteQ</a>
+                             </div>
+                    </td>
+                    <td rowspan="@result.Options.Count()">
+                            <div >
+                                       <a asp-controller="Admin" asp-action="DisplayQuizResult" asp-route-sessionId="@result.QuestionId">AddOption</a>
+                            </div>
+                    </td>
+                    @{int i = 0; }
+                           @foreach (var option in result.Options)
+                           {
+                               if (i > 0)
+                               {
+                                   @:</tr><tr>
+                               }
+                               <td width ="35%">@option.OptionValue</td>
+                               <td width ="5%">@option.ShouldChoose</td>
+                               <td>
+                                    <div >
+                                         <a asp-controller="Admin" asp-action="DisplayQuizResult" asp-route-sessionId="@option.OptionId">Edit</a>
+                                    </div>
+                               </td>
+                                <td>
+                                    <div >
+                                         <a asp-controller="Admin" asp-action="DisplayQuizResult" asp-route-sessionId="@option.OptionId">Delete</a>
+                                    </div>
+                               </td>                              
+
+                               i++;
+                            }
+                    
+                </tr>
+        }
+    </tbody>
+</table>

@@ -21,7 +21,7 @@ namespace Quiz2.Controllers
         }
 
         [HttpGet("[action]")]
-        public IActionResult AdminIndex(int categoryId)
+        public IActionResult AdminIndex()
         {
             
             return View("AdminIndex");
@@ -46,5 +46,17 @@ namespace Quiz2.Controllers
             return View("DisplayQuizResult", result);
         }
 
+        [HttpGet("[action]")]
+        public IActionResult GetAlQuestions()
+        {
+            var allQuestions = _questionDao.GetAllQuestions();
+            return View("AllQuestions", allQuestions);
+        }
+        [HttpGet("[action]")]
+        public IActionResult GetQuestionsByCategory(int categoryId)
+        {
+            var quesByCategory = _questionDao.GetQuestionsByCategoryId(categoryId);
+            return View("AllQuestions", quesByCategory);
+        }
     }
 }

@@ -27,7 +27,7 @@ namespace Quiz2.Controllers
         [HttpGet("/getquestions/{categoryId}")]
         public IActionResult FirstQuestion(int categoryId)
         {
-            string sessionId = _questionDao.GetQuestionsByCategory(categoryId);
+            string sessionId = _questionDao.BuildQuestionsByCategory(categoryId);
             var questionLog = _questionDao.GetQuesitonLogBySesssionIdQuesInsessionId(sessionId, 1);
             LoadViewBag(sessionId);
             return View("Quiz", questionLog);

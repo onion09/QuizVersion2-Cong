@@ -1,9 +1,10 @@
 ﻿@using Quiz2.Models.DBEntities;
+<script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
 @model List<SessionRow>
 
 <h1>The Quiz Results</h1>
 
-<table class=" table table-bordered table-striped" style="width：100%">
+<table id="myTable" class=" table table-bordered table-striped display" style="width：100%">
     <thead>
         <tr>
             <th>Taken Date</th>
@@ -29,3 +30,12 @@
         }
     </tbody>
 </table>
+
+<script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready( function () {
+        $('#myTable').DataTable({
+            "pageLength": 3
+        });
+    } );
+</script>
