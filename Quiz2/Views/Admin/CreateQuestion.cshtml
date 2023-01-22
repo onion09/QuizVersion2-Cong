@@ -1,0 +1,33 @@
+﻿@using Quiz2.Models.DBEntities;
+@model Question
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create Question</h1>
+@*Create a form to take user input and create a button to submit the form*@
+<form method="post" asp-action="CreateQuestion">
+
+    <div class="mb-3">
+        <label asp-for="QuesContent"></label> @*bind the attribute with Category.Name*@
+        <input asp-for="QuesContent" name="quesContent" class="form-control" />
+    </div>
+
+
+   <div class="form-group">
+    <label asp-for="CategoryId"></label>
+    @{
+        var categories = ViewData["Categories"] as IEnumerable<SelectListItem>;
+        if(categories != null)
+        {
+            <select asp-for="CategoryId" asp-items="categories"></select>
+        }
+    }
+    </div>
+    <button type="submit" class ="btn btn-primary" style="width:150px">Create</button> 
+    @*The <a> tag here is to redirect to the index page*@
+    <a asp-controller="Admin" asp-action="AdminIndex" class="btn btn-secondary" style="width: 150px">
+        Back To Question List
+    </a>
+</form>
+

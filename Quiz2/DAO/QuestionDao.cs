@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Quiz2.Models.DBEntities;
 using System.Diagnostics.CodeAnalysis;
@@ -55,22 +56,17 @@ namespace Quiz2.DAO
         }
         public List<Question> GetAllQuestions()
         {
-            var questions = _dbContext.Questions.Include(q => q.Options).OrderBy(q=> q.QuestionId).ToList();
+            var questions = _dbContext.Questions.Include(q => q.Options).Include(q => q.Category).ToList();
             return questions;
         }
         public List<Question> GetQuestionsByCategoryId(int categoryId)
         {
             var questions = _dbContext.Questions.
-                Include(q => q.Options).Where(c => c.CategoryId == categoryId).OrderBy(q =>q.QuestionId).ToList();
+                Include(q => q.Options).Include(q => q.Category).Where(c => c.CategoryId == categoryId).OrderBy(q =>q.QuestionId).ToList();
             return questions;
         }
 
-        public void AddQuestion(int CategoryId, string QuesContent)
-        {
-            var newQues = new Question { CategoryId = CategoryId, QuesContent = QuesContent };
-            _dbContext.Questions.Add(newQues);
-            _dbContext.SaveChanges();
-        }
+       
         public List<Option> GetOptionsByQuestionId(int quesId)
         {
             Question question = _dbContext.Questions.Include(q => q.Options).Where(q => q.QuestionId == quesId).FirstOrDefault();
@@ -208,6 +204,34 @@ namespace Quiz2.DAO
             sessionRows.OrderBy(s=>s.TakenDate).ToList();
             return sessionRows;
         }
+        public IEnumerable<SelectListItem> GetCategories()
+        {
+            var categories = _dbContext.Categories.Select(x => new SelectListItem { Value = x.CategoryId.ToString(), Text = x.CategoryName }).ToList();
+            if (categories == null)
+                return new List<SelectListItem>();
+            return categories;
+        }
+        public int AddCategory(string categoryName)
+        {
+            Category category = new Category(categoryName);
+            _dbContext.Categories.Add(category);
+            _dbContext.SaveChanges();
+            return category.CategoryId;
+        }
+        public int AddQuestion(Question newQues)
+        {
+            _dbContext.Questions.Add(newQues);
+            _dbContext.SaveChanges();
+            return newQues.QuestionId;
+        }
 
+        public int AddOption(int quesId, string optionValue, bool shouldChoose)
+        {
+            Option option = new Option(quesId, optionValue, shouldChoose);
+            _dbContext.Options.Add(option);
+            _dbContext.SaveChanges();
+            return option.OptionId;
+        }
+        
     }
 }

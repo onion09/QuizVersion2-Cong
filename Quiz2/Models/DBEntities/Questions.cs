@@ -11,8 +11,16 @@ namespace Quiz2.Models.DBEntities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CategoryId { get; set; }
-        public string CategoryName { get; set; }    
+        public string CategoryName { get; set; }
 
+        [ForeignKey("CategoryId")]
+        [JsonIgnore]
+        public List<Question> Questions { get; set; }
+        public Category() { }
+        public Category(string name) 
+        {
+            this.CategoryName = name;
+        }
     }
 
 
@@ -29,9 +37,18 @@ namespace Quiz2.Models.DBEntities
         [InverseProperty("Question")]
         public List<Option> Options { get; set; }
 
+        [InverseProperty("Questions")]
+        public Category Category { get; set; }
+
         //[ForeignKey("QuestionLogId")]
         //[JsonIgnore]
-        //public List<QuestionLog> questionLogs { get; set; } 
+        //public List<QuestionLog> questionLogs { get; set; }
+        public Question() { }
+        public Question(int cateId, string QuesContent)
+        {
+            this.CategoryId = cateId;
+            this.QuesContent = QuesContent;
+        }
     }
 
     [Table("Options")]
@@ -48,5 +65,11 @@ namespace Quiz2.Models.DBEntities
         [ForeignKey("QuestionId")]
         [JsonIgnore]
         public Question Question { get; set; }
+        public Option() { } 
+        public Option(int quesId, string optionValue, bool shouldChoose)
+        {
+            this.QuestionId = quesId;
+            this.OptionValue = optionValue;
+        }
     }
 }

@@ -58,5 +58,30 @@ namespace Quiz2.Controllers
             var quesByCategory = _questionDao.GetQuestionsByCategoryId(categoryId);
             return View("AllQuestions", quesByCategory);
         }
+
+        [HttpPost("[action]")]
+        public IActionResult CreateCategory(string categoryName)
+        {
+            _questionDao.AddCategory(categoryName);
+            return RedirectToAction("Index"); //after adding new category go back to index page
+        }
+        [HttpPost("[action]")]
+        public IActionResult CreateQuestion(Question question)
+        {
+            _questionDao.AddQuestion(question);
+            return RedirectToAction("GetAlQuestions"); //after adding new question go back to index page
+        }
+        [HttpGet("[action]")]
+        public IActionResult CreateQuestion()
+        {
+            ViewData["Categories"] = _questionDao.GetCategories();
+            return View();
+        }
+        [HttpGet("[action]")]
+        public IActionResult EditQuestion()
+        {
+            ViewData["Categories"] = _questionDao.GetCategories();
+            return View();
+        }
     }
 }

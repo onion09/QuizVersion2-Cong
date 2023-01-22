@@ -1,0 +1,21 @@
+﻿@using Quiz2.Models.DBEntities;
+@model Category
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create Category</h1>
+@*Create a form to take user input and create a button to submit the form*@
+<form method="post" asp-action="CreateCategory">
+
+    <div class="mb-3">
+        <label asp-for="CategoryName"></label> @*bind the attribute with Category.Name*@
+        <input asp-for="CategoryName" class="form-control" />
+    </div>
+    <button type="submit" class ="btn btn-primary" style="width:150px">Create</button> 
+    @*The <a> tag here is to redirect to the index page*@
+    <a asp-controller="Admin" asp-action="AdminIndex" class="btn btn-secondary" style="width: 150px">
+        Back To Question List
+    </a>
+</form>
+

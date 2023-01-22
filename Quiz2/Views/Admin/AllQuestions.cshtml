@@ -1,8 +1,30 @@
 ﻿@using Quiz2.Models.DBEntities;
-<script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
-@model List<Question>
 
+
+@model List<Question>
+@{
+    ViewData["Title"] = "Index";
+}
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css"/>
+    <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+</head>
 <h1>Questions</h1>
+<div class="container p-3">
+    <div class="row pt-4">
+        <div class="col-6">
+            <h2>Category List</h2>
+        </div>
+        <div class="col-6 text-end">
+            @*<a href = "/category/create">*@
+
+            <a asp-controller = "Admin" asp-action="CreateQuestion" class="btn btn-primary">
+                Create new Questions
+            </a>
+        </div>
+    </div>
+</div>
 
 <table id="myTable" class=" table table-bordered table-striped display" style="width：100%">
     <thead>
@@ -20,7 +42,7 @@
         {
                 <tr>
                     <td rowspan="@result.Options.Count()"width ="2%">@result.QuestionId</td>
-                    <td rowspan="@result.Options.Count()" width="5%">@result.CategoryId</td>
+                    <td rowspan="@result.Options.Count()" width="5%">@result.Category.CategoryName</td>
                     <td rowspan="@result.Options.Count()"width="25%">@result.QuesContent</td>
                     <td rowspan="@result.Options.Count()">
                             <div >
@@ -64,3 +86,11 @@
         }
     </tbody>
 </table>
+
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable({
+            "pageLength": 3
+        });
+    });
+</script>
