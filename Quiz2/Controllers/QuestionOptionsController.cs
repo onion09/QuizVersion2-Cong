@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Quiz2.Controllers
 {
-    //[Authorize]
+    [Authorize]
 
     [Route("QuizController")]
     public class QuestionOptionsController : Controller
@@ -67,6 +67,7 @@ namespace Quiz2.Controllers
         {
             _questionDao.UpdateQuestionLog(quesLogId, answer);
             var questionLog = _questionDao.GetQuesitonLogBySesssionIdQuesInsessionId(sessionId, curIndex);
+            LoadViewBag(sessionId);
 
             return View("Quiz", questionLog);
         }

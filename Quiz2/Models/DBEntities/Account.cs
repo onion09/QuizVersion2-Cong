@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Quiz2.Models.DBEntities
 {
@@ -23,7 +24,8 @@ namespace Quiz2.Models.DBEntities
         public string firstName { get; set; }
         public string lastName { get; set; }
         public string role { get; set; }
-
-
+        [ForeignKey("UserId")]
+        [JsonIgnore]
+        public List<SessionLog> SessionLogs { get; set; }
     }
 }

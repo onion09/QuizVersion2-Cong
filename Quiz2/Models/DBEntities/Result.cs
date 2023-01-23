@@ -7,6 +7,7 @@
         public string? PassContiditon { get; set; }
         public string QuizCategory { get; set; }
         public List<int> QuesId { get; set; }
+        public string UserFullName { get; set; }
     }
     public class QuestionResult
     {

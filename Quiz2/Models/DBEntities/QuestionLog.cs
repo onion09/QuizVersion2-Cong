@@ -35,7 +35,7 @@ namespace Quiz2.Models.DBEntities
         [Key]
         public string SessionId { get; set; }
         public int CategoryId { get; set; }
-        public string? UserId { get; set; }
+        public int? UserId { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime? EndTime { get; set; }
         public int Score { get; set; }
@@ -43,6 +43,9 @@ namespace Quiz2.Models.DBEntities
         public virtual Category Category { get; set; }
         [InverseProperty("SessionLog")]
         public List<QuestionLog> QuestionLogs { get; set; }
+
+        [InverseProperty("SessionLogs")]
+        public Account Account { get; set; }
         //[NotMapped] public string QuizName { get; set; }
 
 

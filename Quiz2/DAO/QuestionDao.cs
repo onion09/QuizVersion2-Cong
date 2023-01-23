@@ -86,7 +86,7 @@ namespace Quiz2.DAO
             var session = _dbContext.SessionLogs.Where(s=> s.SessionId == SessionId).FirstOrDefault();
             if (session != null)
             {
-                session.UserId = _cache.Get<string>("userId");
+                session.UserId = int.Parse(_cache.Get<string>("userId"));
                 session.EndTime = EndTime ?? session.EndTime;
                 session.Score = score ?? session.Score;
             }
@@ -148,7 +148,7 @@ namespace Quiz2.DAO
 
         public SessionLog GetSessionById(string sessionId)
         {
-            var session = _dbContext.SessionLogs
+            var session = _dbContext.SessionLogs.Include(s=>s.Account)
                 .Where(s => s.SessionId == sessionId).FirstOrDefault();
             return session;
         }
@@ -178,8 +178,9 @@ namespace Quiz2.DAO
                 quesIds.Add(item.Value.Question.QuestionId);
             }
             string categaryName = _dbContext.Categories.Find(sessionlog.CategoryId).CategoryName;
+            var userFullName = sessionlog.Account.firstName + " " +sessionlog.Account.lastName;
             Result result = new Result
-            {
+            {   UserFullName= userFullName,
                 sessionLog = sessionlog,
                 questionResultMap = resultMap,
                 PassContiditon = passCon,
