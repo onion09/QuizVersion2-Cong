@@ -1,5 +1,6 @@
 using Quiz2.DAO;
 using Quiz2.Models.DBEntities;
+using QuizProject.Dao;
 
 namespace Quiz2
 {
@@ -10,13 +11,25 @@ namespace Quiz2
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddTransient<AccountDao>();
+            //Add / register sign in authentication handler
+            builder.Services.AddAuthentication("MyCookie").AddCookie("MyCookie", options =>
+            {
+                options.Cookie.Name = "MyCookie";
+                options.LoginPath = "/Account/Login";
+                options.AccessDeniedPath = "/Account/AccessDenied";
+                options.ExpireTimeSpan = TimeSpan.FromSeconds(1000); //set the cookie expiriation time
+            });
             builder.Services.AddControllers();
             builder.Services.AddControllersWithViews();
-            builder.Services.AddSession();
+            builder.Services.AddMemoryCache(options =>
+            {
+                options.ExpirationScanFrequency = TimeSpan.FromMinutes(5);
+            });
+
             builder.Services.AddTransient<QuestionDao>();
-            builder.Services.AddTransient<LogDao>();
             builder.Services.AddDbContext<ApplicationDBContext>();
-            
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -31,10 +44,12 @@ namespace Quiz2
             app.UseStaticFiles();
 
             app.UseRouting();
-            app.UseSession();
+            //Add Authentication to the pipeline, order matters, Authentication -> Authorization
+            app.UseAuthentication();
 
             app.UseAuthorization();
-            
+            //app.UseEndpoints(endpoints => endpoints.MapControllers());
+
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");

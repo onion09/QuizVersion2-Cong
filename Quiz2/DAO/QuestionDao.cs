@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Caching.Memory;
 using Quiz2.Models.DBEntities;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
@@ -10,9 +11,12 @@ namespace Quiz2.DAO
     public class QuestionDao
     {
         private readonly ApplicationDBContext _dbContext;
-        public QuestionDao(ApplicationDBContext dbContext)
+        private readonly IMemoryCache _cache;
+
+        public QuestionDao(ApplicationDBContext dbContext, IMemoryCache memoryCache)
         {
             _dbContext = dbContext;
+            _cache = memoryCache;
         }
 
         //Get random questions- options list based on categoryId. 
@@ -25,6 +29,7 @@ namespace Quiz2.DAO
                 var randomQuestions = questions.Take(5).ToList();
                 //Create new sessionLog
                 string sessionId = PostNewSession(categoryId);
+
                 for (int i = 0; i < randomQuestions.Count; i++)
                 {
                     var questionLog = PostNewQuestionLog(sessionId, randomQuestions[i].QuestionId, i + 1);
@@ -81,6 +86,7 @@ namespace Quiz2.DAO
             var session = _dbContext.SessionLogs.Where(s=> s.SessionId == SessionId).FirstOrDefault();
             if (session != null)
             {
+                session.UserId = _cache.Get<string>("userId");
                 session.EndTime = EndTime ?? session.EndTime;
                 session.Score = score ?? session.Score;
             }

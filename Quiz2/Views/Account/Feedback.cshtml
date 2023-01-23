@@ -1,0 +1,12 @@
+﻿
+@{
+}
+<h1>Feedback</h1>
+
+<form method="post" asp-controller="Account" asp-action="SubmitFeedback">
+    <div class="form-group">
+        <label for="feedback">Leave your feedback:</label>
+        <textarea class="form-control" id="feedback" name="feedback"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit Feedback</button>
+</form>

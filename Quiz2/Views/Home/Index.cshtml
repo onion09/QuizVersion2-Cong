@@ -2,7 +2,21 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Home</title>
+</head>
+
+<body>
+    <form method="post" name="Home">
+        <h2>Home</h2>
+        @Html.ActionLink("Sql", "FirstQuestion","QuizController", new {id = 1}, null)<br />
+        @Html.ActionLink("C#", "FirstQuestion","QuizController", new {id = 2}, null)<br />
+        @Html.ActionLink("JS", "FirstQuestion","QuizController", new {id = 3}, null)<br />
+
+    </form>
+</body>
+
+</html> 

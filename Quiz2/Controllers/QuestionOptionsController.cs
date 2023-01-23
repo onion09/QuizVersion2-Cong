@@ -3,28 +3,25 @@ using Quiz2.DAO;
 using Quiz2.Models.DBEntities;
 using Microsoft.AspNetCore.Session;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Quiz2.Controllers
 {
+    //[Authorize]
+
     [Route("QuizController")]
     public class QuestionOptionsController : Controller
 
     {
         private readonly QuestionDao _questionDao;
-        private readonly LogDao _logDao;
-        //private int currentIndex;
-        //private List<Question> _questions;
-        //private int _sessionId;
-        //private Dictionary<int, int> _questionLogMap = new Dictionary<int, int>();
-        //private readonly ISessionStore _sessionStore;
+        
 
-        public QuestionOptionsController(QuestionDao questionDao, LogDao questionLogDao)
+        public QuestionOptionsController(QuestionDao questionDao)
         {
             this._questionDao = questionDao;
-            this._logDao = questionLogDao;
         }
 
-        [HttpGet("/getquestions/{categoryId}")]
+        [HttpGet("[action]/{categoryId}")]
         public IActionResult FirstQuestion(int categoryId)
         {
             string sessionId = _questionDao.BuildQuestionsByCategory(categoryId);

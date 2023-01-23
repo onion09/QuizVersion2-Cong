@@ -1,0 +1,30 @@
+﻿@using Quiz2.Models.DBEntities;
+
+@model Account
+@{
+    ViewData["Title"] = "Register";
+
+}
+<h1>Register</h1>
+@*Create a form to take user input and create a button to submit the form*@
+<form method="post" asp-action="Register">
+
+    <div class="mb-3">
+        <label asp-for="username"></label> @*bind the attribute with Account.UserName*@
+        <input asp-for="username" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="password"></label> @*bind the attribute with Account.Password*@
+        <input asp-for="password" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="email"></label> @*bind the attribute with Account.email*@
+        <input asp-for="email" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary" style="width:150px">Submit</button>
+    @*The <a> tag here is to redirect to the index page*@
+    <a asp-controller="Account" asp-action="Login" class="btn btn-secondary" style="width: 150px">
+        Back To Login
+    </a>
+</form>
+</div>

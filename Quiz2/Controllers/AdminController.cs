@@ -13,13 +13,11 @@ namespace Quiz2.Controllers
 
     {
         private readonly QuestionDao _questionDao;
-        private readonly LogDao _logDao;
 
 
-        public AdminController(QuestionDao questionDao, LogDao questionLogDao)
+        public AdminController(QuestionDao questionDao)
         {
             this._questionDao = questionDao;
-            this._logDao = questionLogDao;
         }
 
         [HttpGet("[action]")]
