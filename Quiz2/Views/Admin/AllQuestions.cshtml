@@ -35,6 +35,10 @@
             <th>EditQ</th>
             <th>DeleteQ</th>
             <th>AddO</th>
+            <th>OptionValue</th>
+            <th>ShoudBeChoose</th>
+            <th>EditOption</th>
+            <th>DeleteOption</th>
         </tr>
     </thead>
     <tbody>
@@ -44,17 +48,17 @@
                     <td rowspan="@result.Options.Count()"width ="2%">@result.QuestionId</td>
                     <td rowspan="@result.Options.Count()" width="5%">@result.Category.CategoryName</td>
                     <td rowspan="@result.Options.Count()"width="25%">@result.QuesContent</td>
-                    <td rowspan="@result.Options.Count()">
+                    <td rowspan="@result.Options.Count()"width="5%">
                             <div >
                                        <a asp-controller="Admin" asp-action="EditQuestion" asp-route-quesId="@result.QuestionId">EditQ</a>
                              </div>
                     </td>
-                    <td rowspan="@result.Options.Count()">
+                    <td rowspan="@result.Options.Count()"width="5%">
                             <div >
-                                       <a asp-controller="Admin" asp-action="DeleteQuestion" asp-route-sessionId="@result.QuestionId">DeleteQ</a>
+                                       <a asp-controller="Admin" asp-action="DeleteQuestion" asp-route-quesId="@result.QuestionId">DeleteQ</a>
                              </div>
                     </td>
-                    <td rowspan="@result.Options.Count()">
+                    <td rowspan="@result.Options.Count()"width="5%">
                             <div >
                                        <a asp-controller="Admin" asp-action="AddOption" asp-route-sessionId="@result.QuestionId">AddOption</a>
                             </div>
@@ -66,14 +70,14 @@
                                {
                                    @:</tr><tr>
                                }
-                               <td width ="35%">@option.OptionValue</td>
-                               <td width ="5%">@option.ShouldChoose</td>
-                               <td>
+                               <td width ="55%">@option.OptionValue</td>
+                               <td width ="10%">@option.ShouldChoose</td>
+                               <td width ="10%">
                                     <div >
                                          <a asp-controller="Admin" asp-action="DisplayQuizResult" asp-route-sessionId="@option.OptionId">Edit</a>
                                     </div>
-                               </td>
-                                <td>
+                               </td >
+                                <td width ="10%">
                                     <div >
                                          <a asp-controller="Admin" asp-action="DisplayQuizResult" asp-route-sessionId="@option.OptionId">Delete</a>
                                     </div>

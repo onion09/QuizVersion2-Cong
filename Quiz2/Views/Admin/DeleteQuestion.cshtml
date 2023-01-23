@@ -1,0 +1,28 @@
+﻿@using Quiz2.Models.DBEntities;
+@model Question
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete Question</h1>
+<form method="Post" asp-action="DeleteQuestion">
+    <div class="mb-3">
+        <label asp-for="QuestionId"  class="display-6">Id: @Model.QuestionId</label>
+
+    </div>
+    <div class="mb-3">
+        <label asp-for="QuesContent"  class="display-6">Question: @Model.QuesContent</label>
+    </div>
+    <div class="mb-3">
+        <label asp-for="CategoryId"  class="display-6">Category: @Model.Category.CategoryName</label>
+    </div>
+
+    <input type="hidden" asp-for="QuestionId" name="quesId" />
+
+    <button type="submit" class="btn btn-primary" style="width:150px">Delete</button>
+    @*The <a> tag here is to redirect to the index page*@
+    <a asp-controller="Admin" asp-action="GetAlQuestions" class="btn btn-secondary" style="width: 150px">
+        Back To List
+    </a>
+</form>
+

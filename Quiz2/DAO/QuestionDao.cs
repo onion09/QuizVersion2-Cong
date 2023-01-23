@@ -239,14 +239,28 @@ namespace Quiz2.DAO
         }
         public void UpdateQuestion(int quesId, Question updateQuestion)
         {
-            var question = _dbContext.Questions.FirstOrDefault(q=>q.QuestionId == quesId);
+            var question = GetQuestionById(quesId);
             if(question!= null)
             {
                 question.QuesContent = updateQuestion.QuesContent;
                 question.CategoryId = updateQuestion.CategoryId;
                 _dbContext.SaveChanges();
             }
-
+        }
+        public void DeleteQuestion(int quesId)
+        {
+            _dbContext.ChangeTracker.AutoDetectChangesEnabled = false;
+            var question = GetQuestionById(quesId);
+            if(question != null)
+            {
+                var options = _dbContext.Options.Where(o => o.QuestionId == quesId);
+                _dbContext.Options.RemoveRange(options);
+                var quesLog = _dbContext.QuestionLogs.Where(ql => ql.QuestionId == quesId);
+                _dbContext.QuestionLogs.RemoveRange(quesLog);
+                _dbContext.Questions.Remove(question);
+                _dbContext.SaveChanges();
+            }
+            _dbContext.ChangeTracker.AutoDetectChangesEnabled = true;
         }
     }
 }

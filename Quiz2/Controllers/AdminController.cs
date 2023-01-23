@@ -85,9 +85,21 @@ namespace Quiz2.Controllers
             return View(question);
         }
         [HttpPost("[action]")]
-        public IActionResult EditQuestion(int quesId,Question updatedCategory)
+        public IActionResult EditQuestion(int quesId,Question updatedQuestion)
         {
-            _questionDao.UpdateQuestion(quesId, updatedCategory);
+            _questionDao.UpdateQuestion(quesId, updatedQuestion);
+            return RedirectToAction("GetAlQuestions");
+        }
+        [HttpGet("[action]")]
+        public IActionResult DeleteQuestion(int quesId)
+        {
+            var question = _questionDao.GetQuestionById(quesId);
+            return View(question);
+        }
+        [HttpPost("[action]")]
+        public IActionResult DeleteQuestion (int quesId, Question quesDelete)
+        {
+            _questionDao.DeleteQuestion(quesId);
             return RedirectToAction("GetAlQuestions");
         }
     }
