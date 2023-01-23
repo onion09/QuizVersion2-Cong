@@ -63,12 +63,7 @@ namespace Quiz2.Controllers
             this.LoadViewBag(sessionId);
             return View("Quiz", currentLog);
         }
-        [HttpGet("/getoptions/{quesId}")]
-        public ActionResult<List<Option>> GetOptionsByQuestionId(int quesId)
-        {
-            var options = _questionDao.GetOptionsByQuestionId(quesId);
-            return Ok(options);
-        }
+        
 
         [HttpPost("[action]")]
         public async Task<IActionResult> SubmitAnswer(string answer, string sessionId, int quesLogId, int curIndex )

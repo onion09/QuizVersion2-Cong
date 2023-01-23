@@ -1,0 +1,35 @@
+﻿@using Quiz2.Models.DBEntities;
+@model Option
+@{
+    ViewData["Title"] = "EditOption";
+}
+
+<h1>Edit Option</h1>
+<form method="Post" asp-action="EditOption">
+    <div class="mb-3">
+        <label asp-for="OptionId"  class="display-6">Id: @Model.OptionId</label>
+
+    </div>
+    <div class="mb-3">
+        <label asp-for="OptionValue"></label> @*bind the attribute with Category.Name*@
+        <input asp-for="OptionValue" class="form-control" />
+    </div>
+    <div class="form-group">
+    <label asp-for="ShouldChoose"></label>
+        @{
+            var shouldChoose = ViewData["ShoudChoose"] as IEnumerable<SelectListItem>;
+            if (shouldChoose != null)
+            {
+                <select asp-for="ShouldChoose" asp-items="shouldChoose"></select>
+            }
+        }
+    </div>
+    <input type="hidden" asp-for="OptionId" name="optionId" />
+
+    <button type="submit" class="btn btn-primary" style="width:150px">Update</button>
+    @*The <a> tag here is to redirect to the index page*@
+    <a asp-controller="Admin" asp-action="GetAlQuestions" class="btn btn-secondary" style="width: 150px">
+        Back To List
+    </a>
+</form>
+

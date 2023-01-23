@@ -60,7 +60,7 @@
                     </td>
                     <td rowspan="@result.Options.Count()"width="5%">
                             <div >
-                                       <a asp-controller="Admin" asp-action="AddOption" asp-route-sessionId="@result.QuestionId">AddOption</a>
+                                       <a asp-controller="Admin" asp-action="CreateOption" asp-route-quesId="@result.QuestionId">AddOption</a>
                             </div>
                     </td>
                     @{int i = 0; }
@@ -74,12 +74,12 @@
                                <td width ="10%">@option.ShouldChoose</td>
                                <td width ="10%">
                                     <div >
-                                         <a asp-controller="Admin" asp-action="DisplayQuizResult" asp-route-sessionId="@option.OptionId">Edit</a>
+                                         <a asp-controller="Admin" asp-action="EditOption" asp-route-optionId="@option.OptionId">Edit</a>
                                     </div>
                                </td >
                                 <td width ="10%">
                                     <div >
-                                         <a asp-controller="Admin" asp-action="DisplayQuizResult" asp-route-sessionId="@option.OptionId">Delete</a>
+                                         <a asp-controller="Admin" asp-action="DeleteOption" asp-route-optionId="@option.OptionId">Delete</a>
                                     </div>
                                </td>                              
 

@@ -1,0 +1,38 @@
+﻿@using Quiz2.Models.DBEntities;
+@model Option
+@{
+    ViewData["Title"] = "CreateOption";
+}
+
+<h1>Create Question</h1>
+@*Create a form to take user input and create a button to submit the form*@
+<form method="post" asp-action="CreateOption">
+
+    <div class="mb-3">
+        <label asp-for="@Model.Question.QuesContent"></label>
+    </div>
+    <div class="mb-3">
+        <label asp-for="OptionValue"></label> @*bind the attribute with Option*@
+        <input asp-for="OptionValue" name="OptionValue" class="form-control" />
+    </div>
+
+
+   <div class="form-group">
+    <label asp-for="ShouldChoose"></label>
+    @{
+            var shouldChoose = ViewData["ShoudChoose"] as IEnumerable<SelectListItem>;
+            if (shouldChoose != null)
+        {
+                <select asp-for="ShouldChoose" asp-items="shouldChoose"></select>
+        }
+    }
+    </div>
+    <input type="hidden" value="@ViewData["quesId"]" name="QuestionId" />
+
+    <button type="submit" class ="btn btn-primary" style="width:150px">Create</button> 
+    @*The <a> tag here is to redirect to the index page*@
+    <a asp-controller="Admin" asp-action="AdminIndex" class="btn btn-secondary" style="width: 150px">
+        Back To Question List
+    </a>
+</form>
+

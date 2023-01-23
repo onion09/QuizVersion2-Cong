@@ -3,6 +3,8 @@ using Quiz2.DAO;
 using Quiz2.Models.DBEntities;
 using Microsoft.AspNetCore.Session;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Quiz2.Controllers
 {
@@ -77,6 +79,25 @@ namespace Quiz2.Controllers
             ViewData["Categories"] = _questionDao.GetCategories();
             return View();
         }
+
+        [HttpPost("[action]")]
+        public IActionResult CreateOption(Option option)
+        {
+            _questionDao.AddOption(option);
+            return RedirectToAction("GetAlQuestions"); //after adding new question go back to index page
+        }
+        [HttpGet("[action]")]
+        public IActionResult CreateOption(int quesId)
+        {
+            List<SelectListItem> shoudChoose = new List<SelectListItem>() {
+            new SelectListItem { Text = "No", Value ="false"},
+            new SelectListItem{Text = "Yes", Value ="true"}
+            };
+            ViewBag.ShoudChoose = shoudChoose;
+            ViewData["quesId"] = quesId;
+            var option = _questionDao.GetOptionByQuestionId(quesId);
+            return View();
+        }
         [HttpGet("[action]")]
         public IActionResult EditQuestion(int quesId)
         {
@@ -91,6 +112,23 @@ namespace Quiz2.Controllers
             return RedirectToAction("GetAlQuestions");
         }
         [HttpGet("[action]")]
+        public IActionResult EditOption(int optionId)
+        {
+            var option = _questionDao.GetOptionById(optionId);
+            List<SelectListItem> shoudChoose = new List<SelectListItem>() {
+            new SelectListItem { Text = "No", Value ="false"},
+            new SelectListItem{Text = "Yes", Value ="true"}
+            };
+            ViewBag.ShoudChoose = shoudChoose;
+            return View(option);
+        }
+        [HttpPost("[action]")]
+        public IActionResult EditOption(int optionId, Option updatedOption)
+        {
+            _questionDao.UpdateOption(optionId, updatedOption);
+            return RedirectToAction("GetAlQuestions");
+        }
+        [HttpGet("[action]")]
         public IActionResult DeleteQuestion(int quesId)
         {
             var question = _questionDao.GetQuestionById(quesId);
@@ -100,6 +138,18 @@ namespace Quiz2.Controllers
         public IActionResult DeleteQuestion (int quesId, Question quesDelete)
         {
             _questionDao.DeleteQuestion(quesId);
+            return RedirectToAction("GetAlQuestions");
+        }
+        [HttpGet("[action]")]
+        public IActionResult DeleteOption(int optionId)
+        {
+            var option = _questionDao.GetOptionById(optionId);
+            return View(option);
+        }
+        [HttpPost("[action]")]
+        public IActionResult DeleteOption(int optionId, Option option)
+        {
+            _questionDao.DeleteOption(optionId);
             return RedirectToAction("GetAlQuestions");
         }
     }

@@ -67,11 +67,6 @@ namespace Quiz2.DAO
         }
 
        
-        public List<Option> GetOptionsByQuestionId(int quesId)
-        {
-            Question question = _dbContext.Questions.Include(q => q.Options).Where(q => q.QuestionId == quesId).FirstOrDefault();
-            return question.Options;
-        }
         
 
         public string PostNewSession(int CategoryId)
@@ -225,18 +220,28 @@ namespace Quiz2.DAO
             return newQues.QuestionId;
         }
 
-        public int AddOption(int quesId, string optionValue, bool shouldChoose)
+        public int AddOption(Option newOption)
         {
-            Option option = new Option(quesId, optionValue, shouldChoose);
-            _dbContext.Options.Add(option);
+            _dbContext.Options.Add(newOption);
             _dbContext.SaveChanges();
-            return option.OptionId;
+            return newOption.OptionId;
         }
         public Question GetQuestionById(int questionId)
         {
             var question = _dbContext.Questions.Include(q=>q.Category).Where(q => q.QuestionId== questionId).FirstOrDefault();
             return question;
         }
+        public Option GetOptionByQuestionId(int quesId)
+        {
+            Option option = _dbContext.Options.Include(q => q.Question).ThenInclude(q => q.Options).Where(q => q.QuestionId == quesId).FirstOrDefault();
+            return option;
+        }
+        public Option GetOptionById(int optionId)
+        {
+            Option option = _dbContext.Options.Include(o=>o.Question).Where(o=>o.OptionId== optionId).FirstOrDefault();
+            return option;
+        }
+
         public void UpdateQuestion(int quesId, Question updateQuestion)
         {
             var question = GetQuestionById(quesId);
@@ -244,6 +249,16 @@ namespace Quiz2.DAO
             {
                 question.QuesContent = updateQuestion.QuesContent;
                 question.CategoryId = updateQuestion.CategoryId;
+                _dbContext.SaveChanges();
+            }
+        }
+        public void UpdateOption(int optionId, Option updateOption)
+        {
+            var option = GetOptionById(optionId);
+            if (option != null)
+            {
+                option.OptionValue = updateOption.OptionValue;
+                option.ShouldChoose = updateOption.ShouldChoose;
                 _dbContext.SaveChanges();
             }
         }
@@ -261,6 +276,15 @@ namespace Quiz2.DAO
                 _dbContext.SaveChanges();
             }
             _dbContext.ChangeTracker.AutoDetectChangesEnabled = true;
+        }
+        public void DeleteOption(int optionId) 
+        { 
+            var option = GetOptionById(optionId);
+            if(option != null)
+            {
+                _dbContext.Options.Remove(option);
+                _dbContext.SaveChanges();
+            }
         }
     }
 }
