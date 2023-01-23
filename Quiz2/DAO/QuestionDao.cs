@@ -232,6 +232,21 @@ namespace Quiz2.DAO
             _dbContext.SaveChanges();
             return option.OptionId;
         }
-        
+        public Question GetQuestionById(int questionId)
+        {
+            var question = _dbContext.Questions.Include(q=>q.Category).Where(q => q.QuestionId== questionId).FirstOrDefault();
+            return question;
+        }
+        public void UpdateQuestion(int quesId, Question updateQuestion)
+        {
+            var question = _dbContext.Questions.FirstOrDefault(q=>q.QuestionId == quesId);
+            if(question!= null)
+            {
+                question.QuesContent = updateQuestion.QuesContent;
+                question.CategoryId = updateQuestion.CategoryId;
+                _dbContext.SaveChanges();
+            }
+
+        }
     }
 }

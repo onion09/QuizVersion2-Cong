@@ -46,17 +46,17 @@
                     <td rowspan="@result.Options.Count()"width="25%">@result.QuesContent</td>
                     <td rowspan="@result.Options.Count()">
                             <div >
-                                       <a asp-controller="Admin" asp-action="DisplayQuizResult" asp-route-sessionId="@result.QuestionId">EditQ</a>
+                                       <a asp-controller="Admin" asp-action="EditQuestion" asp-route-quesId="@result.QuestionId">EditQ</a>
                              </div>
                     </td>
                     <td rowspan="@result.Options.Count()">
                             <div >
-                                       <a asp-controller="Admin" asp-action="DisplayQuizResult" asp-route-sessionId="@result.QuestionId">DeleteQ</a>
+                                       <a asp-controller="Admin" asp-action="DeleteQuestion" asp-route-sessionId="@result.QuestionId">DeleteQ</a>
                              </div>
                     </td>
                     <td rowspan="@result.Options.Count()">
                             <div >
-                                       <a asp-controller="Admin" asp-action="DisplayQuizResult" asp-route-sessionId="@result.QuestionId">AddOption</a>
+                                       <a asp-controller="Admin" asp-action="AddOption" asp-route-sessionId="@result.QuestionId">AddOption</a>
                             </div>
                     </td>
                     @{int i = 0; }

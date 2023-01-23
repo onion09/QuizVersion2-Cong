@@ -78,10 +78,17 @@ namespace Quiz2.Controllers
             return View();
         }
         [HttpGet("[action]")]
-        public IActionResult EditQuestion()
+        public IActionResult EditQuestion(int quesId)
         {
             ViewData["Categories"] = _questionDao.GetCategories();
-            return View();
+            var question = _questionDao.GetQuestionById(quesId);
+            return View(question);
+        }
+        [HttpPost("[action]")]
+        public IActionResult EditQuestion(int quesId,Question updatedCategory)
+        {
+            _questionDao.UpdateQuestion(quesId, updatedCategory);
+            return RedirectToAction("GetAlQuestions");
         }
     }
 }
