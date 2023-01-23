@@ -10,6 +10,8 @@ namespace Quiz2.Models.DBEntities
         public DbSet<QuestionLog> QuestionLogs { get; set; }
         public DbSet<SessionLog> SessionLogs { get; set; }  
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Account> Accounts { get; set; }
+
         public ApplicationDBContext(IConfiguration configuration)
         {
             _configuration = configuration;

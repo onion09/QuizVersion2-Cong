@@ -81,8 +81,8 @@ namespace QuizProject.Dao
         }
         public int AddNewAccount(Account newAccount)
         {
-            string quary = $"INSERT INTO userInfo(UserName, Email, Password, FirstName, LastName, DOB, Role, address, phone) " +
-                $"VALUES(@username, @email, @password, @firstname, @lastname, @dob, @role, @address,@phone )";
+            string quary = $"INSERT INTO userInfo(UserName, Email, Password, FirstName, LastName, Role, address, phone) " +
+                $"VALUES(@username, @email, @password, @firstname, @lastname,  @role, @address,@phone )";
 
             int rowAffected;
             using(var coon = new SqlConnection(_configuration.GetConnectionString("MyConn")))
@@ -94,7 +94,6 @@ namespace QuizProject.Dao
                 cmd.Parameters.AddWithValue("@email", newAccount.email);
                 cmd.Parameters.AddWithValue("@firstname", newAccount.firstName);
                 cmd.Parameters.AddWithValue("@lastname", newAccount.lastName);
-                cmd.Parameters.AddWithValue("@dob", newAccount.dob);
                 cmd.Parameters.AddWithValue("@role", newAccount.role);
                 cmd.Parameters.AddWithValue("@address", newAccount.address);
                 cmd.Parameters.AddWithValue("@phone", newAccount.phone);
