@@ -65,7 +65,10 @@ namespace CookieAuthenticationExample.Controllers
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
+            _cache.Remove("userId");
+            _cache.Remove("username");
             await HttpContext.SignOutAsync("MyCookie");
+            
             return Redirect("/Account/Login");
         }
 
