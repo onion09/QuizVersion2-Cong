@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Session;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using QuizProject.Dao;
 
 namespace Quiz2.Controllers
 {
@@ -13,11 +14,12 @@ namespace Quiz2.Controllers
 
     {
         private readonly QuestionDao _questionDao;
+        private readonly AccountDao _accountDao;
 
-
-        public AdminController(QuestionDao questionDao)
+        public AdminController(QuestionDao questionDao, AccountDao accountDao)
         {
             this._questionDao = questionDao;
+            this._accountDao = accountDao;
         }
 
         [HttpGet("[action]")]
@@ -26,15 +28,13 @@ namespace Quiz2.Controllers
             
             return View("AdminIndex");
         }
-        private void LoadViewBag(string sessionId)
-        {
-            ViewBag.Finished = _questionDao.IsCompleted(sessionId) ? "1" : "0";
-            ViewBag.SessionId = sessionId;
-        }
+
 
         [HttpGet("[action]")]
         public IActionResult GetAllQuizs()
         {
+            var allUsers = _accountDao.GetUserIds();
+            ViewData["allUsers"] = allUsers;
             var allQuizs = _questionDao.GetAllSessions();
             return View("AllSessions", allQuizs);
         }
@@ -44,6 +44,14 @@ namespace Quiz2.Controllers
         {
             Result result = _questionDao.ReturnResult(sessionId);
             return View("DisplayQuizResult", result);
+        }
+        [HttpPost("[action]")]
+        public IActionResult SelectSessionByUserId(string userId)
+        {
+            var allUsers = _accountDao.GetUserIds();
+            ViewData["allUsers"] = allUsers;
+            var quizByUser = _questionDao.GetSessionsByUserId(userId);
+            return View("AllSessions", quizByUser);
         }
 
         [HttpGet("[action]")]
@@ -150,5 +158,16 @@ namespace Quiz2.Controllers
             _questionDao.DeleteOption(optionId);
             return RedirectToAction("GetAlQuestions");
         }
+        [HttpGet("[action]")]
+        public IActionResult GetAllUsers()
+        {
+            var accounts = _accountDao.GetAllAccounts();
+            return View("AllUsers",accounts);  
+        }
+
+
+
+
+
     }
 }

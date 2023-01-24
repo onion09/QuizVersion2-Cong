@@ -23,6 +23,7 @@ namespace Quiz2.Models.DBEntities
         public DateTime? dob { get; set; }
         public string firstName { get; set; }
         public string lastName { get; set; }
+        public string status { get; set; }
         public string role { get; set; }
         [ForeignKey("UserId")]
         [JsonIgnore]

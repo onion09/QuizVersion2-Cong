@@ -1,12 +1,32 @@
 ﻿@using Quiz2.Models.DBEntities;
-<script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+
 @model List<SessionRow>
 
 <h1>The Quiz Results</h1>
+<form method="post" asp-action="SelectSessionByUserId">
+
+
+    <div class="form-group">
+        @{
+            var users = ViewData["allUsers"] as IEnumerable<SelectListItem>;
+            if (users != null)
+            {
+                <select id="userId" name="userId" asp-items="users"></select>
+            }
+        }
+    </div>
+    <button type="submit" class="btn btn-primary" style="width:150px">Select</button>
+    @*The <a> tag here is to redirect to the index page*@
+    <a asp-controller="Admin" asp-action="AdminIndex" class="btn btn-secondary" style="width: 150px">
+        Back To Question List
+    </a>
+</form>
+
 
 <table id="myTable" class=" table table-bordered table-striped display" style="width：100%">
     <thead>
         <tr>
+            <th>User Name</th>
             <th>Taken Date</th>
             <th>Category</th>
             <th>No. of Questions</th>
@@ -17,6 +37,7 @@
         @foreach (var result in Model)
         {
             <tr>
+                <td width="20%">@result.UserFullName</td>
                 <td width ="20%">@result.TakenDate</td>
                 <td width="20%">@result.Category</td>
                 <td width="10%">@result.NumberOfQuestion</td>
@@ -31,11 +52,20 @@
     </tbody>
 </table>
 
-<script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+
 <script>
-    $(document).ready( function () {
-        $('#myTable').DataTable({
-            "pageLength": 3
-        });
-    } );
+    document.getElementById("userid-dropdown").addEventListener("change", function() {
+        var selectedUserId = this.value;
+        filterTableByUserId(selectedUserId);
+    });
+    function filterTableByUserId(userId) {
+    $('#myTable tbody tr').each(function() {
+        var userIdTd = $(this).find("td:first");
+        if (userIdTd.text() !== userId) {
+            $(this).hide();
+        } else {
+            $(this).show();
+        }
+    });
+}
 </script>

@@ -1,0 +1,40 @@
+﻿@using Quiz2.Models.DBEntities;
+<script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+@model List<Account>
+
+<h1>User Information</h1>
+
+<table id="myTable" class=" table table-bordered table-striped display" style="width：100%">
+    <thead>
+        <tr>
+            <th>FirstName</th>
+            <th>LastName</th>
+            <th>Address</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var account in Model)
+        {
+            <tr>
+                <td width="20%">@account.firstName</td>
+                <td width="20%">@account.lastName</td>
+                <td width="20%">@account.address</td>
+                <td width="20%">@account.email</td>
+                <td width="10%">@account.phone</td>
+                <td width="10%">@account.status</td>                    
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready( function () {
+        $('#myTable').DataTable({
+            "pageLength": 3
+        });
+    } );
+</script>

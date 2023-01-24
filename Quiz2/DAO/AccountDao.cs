@@ -117,5 +117,16 @@ namespace QuizProject.Dao
             }
             return rowAffected;
         }
+        public List<Account> GetAllAccounts()
+        {
+            var accounts = _dbContext.Accounts.ToList();
+            return accounts;
+        }
+        public IEnumerable<SelectListItem> GetUserIds()
+        {
+            var userIds = _dbContext.Accounts.Select(x => new SelectListItem { Value = x.userId.ToString(), Text = x.userId.ToString() }).ToList();
+            if (userIds == null) return new List<SelectListItem>();
+            return userIds;
+        }
     }
 }

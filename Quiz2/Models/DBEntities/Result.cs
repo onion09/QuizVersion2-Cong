@@ -21,6 +21,7 @@
         public DateTime TakenDate { get; set; }
         public string Category { get; set; }
         public string UserFullName { get; set; }
+        public int userId { get; set; }
         public int NumberOfQuestion { get; set; }
         public int Score { get; set; }
         public string sessionId { get; set; }

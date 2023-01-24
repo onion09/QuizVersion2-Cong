@@ -195,6 +195,8 @@ namespace Quiz2.DAO
             var sessionRows = (from sl in _dbContext.SessionLogs
                                join c in _dbContext.Categories
                                on sl.CategoryId equals c.CategoryId
+                               join u in _dbContext.Accounts
+                               on sl.UserId equals u.userId
                                select new SessionRow
                                {
                                    TakenDate = sl.StartTime,
@@ -202,8 +204,31 @@ namespace Quiz2.DAO
                                    NumberOfQuestion = sl.QuestionLogs.Count,
                                    Score = sl.Score,
                                    sessionId = sl.SessionId,
+                                   UserFullName = u.firstName + " " +u.lastName,
+                                   userId= u.userId,
                                }).ToList();
-            sessionRows.OrderBy(s=>s.TakenDate).ToList();
+            sessionRows.OrderByDescending(s=>s.TakenDate).ToList();
+            return sessionRows;
+        }
+        public List<SessionRow> GetSessionsByUserId(string userId)
+        {
+            var sessionRows = (from sl in _dbContext.SessionLogs
+                               join c in _dbContext.Categories
+                               on sl.CategoryId equals c.CategoryId
+                               join u in _dbContext.Accounts
+                               on sl.UserId equals u.userId
+                               where sl.UserId == Int32.Parse(userId)
+                               select new SessionRow
+                               {
+                                   TakenDate = sl.StartTime,
+                                   Category = c.CategoryName,
+                                   NumberOfQuestion = sl.QuestionLogs.Count,
+                                   Score = sl.Score,
+                                   sessionId = sl.SessionId,
+                                   UserFullName = u.firstName + " " + u.lastName,
+                                   userId = u.userId,
+                               }).ToList();
+            sessionRows.OrderByDescending(s => s.TakenDate).ToList();
             return sessionRows;
         }
         public IEnumerable<SelectListItem> GetCategories()
@@ -213,6 +238,7 @@ namespace Quiz2.DAO
                 return new List<SelectListItem>();
             return categories;
         }
+
         public int AddCategory(string categoryName)
         {
             Category category = new Category(categoryName);

@@ -7,7 +7,7 @@
 {
     <form method="post" action="@Url.Action("HandleSelection", "Quiz")">
         <div id="questionContainer">
-             <h2>Session: @Model.sessionLog.SessionId</h2>
+             <h2>@Model.UserFullName</h2>
              <p>Category name: @Model.QuizCategory</p>
              <p>started at: @Model.sessionLog.StartTime.ToString("HH:mm:ss")</p>
              <p>ended at: @Model.sessionLog.EndTime</p>
