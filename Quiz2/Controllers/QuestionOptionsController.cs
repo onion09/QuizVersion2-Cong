@@ -39,9 +39,9 @@ namespace Quiz2.Controllers
         public IActionResult DisplayNextQuestion(string sessionId, int quesLogId, int curIndex)
         {
             curIndex++;
-            if (curIndex > 5)
+            if (curIndex > 10)
             {
-                curIndex = 5;
+                curIndex = 10;
             }
             var currentLog = _questionDao.GetQuesitonLogBySesssionIdQuesInsessionId(sessionId, curIndex);
             LoadViewBag(sessionId);

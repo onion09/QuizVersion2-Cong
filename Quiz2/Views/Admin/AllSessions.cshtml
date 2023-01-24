@@ -11,14 +11,18 @@
             var users = ViewData["allUsers"] as IEnumerable<SelectListItem>;
             if (users != null)
             {
-                <select id="userId" name="userId" asp-items="users"></select>
+                <label for="userId">Select a User's result':</label>
+                <select id="userId" name="userId" asp-items="users" placeholder="Select a UserId"></select>
             }
         }
     </div>
     <button type="submit" class="btn btn-primary" style="width:150px">Select</button>
     @*The <a> tag here is to redirect to the index page*@
     <a asp-controller="Admin" asp-action="AdminIndex" class="btn btn-secondary" style="width: 150px">
-        Back To Question List
+        Back To Admin Index
+    </a>
+    <a asp-controller="Admin" asp-action="GetAllQuizs" class="btn btn-secondary" style="width: 150px">
+        Back To All Quiz
     </a>
 </form>
 

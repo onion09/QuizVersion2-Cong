@@ -26,7 +26,7 @@ namespace Quiz2.DAO
             {
                 var questions = _dbContext.Questions.Include(q => q.Options).Where(c => c.CategoryId == categoryId).ToList();
                 Shuffle(questions);
-                var randomQuestions = questions.Take(5).ToList();
+                var randomQuestions = questions.Take(10).ToList();
                 //Create new sessionLog
                 string sessionId = PostNewSession(categoryId);
 
@@ -207,8 +207,8 @@ namespace Quiz2.DAO
                                    UserFullName = u.firstName + " " +u.lastName,
                                    userId= u.userId,
                                }).ToList();
-            sessionRows.OrderByDescending(s=>s.TakenDate).ToList();
-            return sessionRows;
+            var sortedRows = sessionRows.OrderByDescending(s=>s.TakenDate).ToList();
+            return sortedRows;
         }
         public List<SessionRow> GetSessionsByUserId(string userId)
         {
@@ -228,8 +228,8 @@ namespace Quiz2.DAO
                                    UserFullName = u.firstName + " " + u.lastName,
                                    userId = u.userId,
                                }).ToList();
-            sessionRows.OrderByDescending(s => s.TakenDate).ToList();
-            return sessionRows;
+            var sortedRows=sessionRows.OrderByDescending(s => s.TakenDate).ToList();
+            return sortedRows;
         }
         public IEnumerable<SelectListItem> GetCategories()
         {
