@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Quiz2.Models.DBEntities;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.AspNetCore.Authorization;
 
 namespace QuizProject.Dao
 {
@@ -15,13 +17,15 @@ namespace QuizProject.Dao
     {
         private readonly IConfiguration _configuration;
         private readonly ApplicationDBContext _dbContext;
+        private readonly IMemoryCache _cache;
+
 
         private readonly string _checkIfMatchQuery = "SELECT COUNT(*) FROM userInfo WHERE userName = @username AND password = @password";
-        public AccountDao(IConfiguration configuration, ApplicationDBContext dbContext)
+        public AccountDao(IConfiguration configuration, ApplicationDBContext dbContext, IMemoryCache memoryCache)
         {
             _configuration = configuration;
             _dbContext = dbContext;
-
+            _cache = memoryCache;
         }
 
         public string GetPermissionByUserName(string userName)
@@ -102,9 +106,10 @@ namespace QuizProject.Dao
             return rowAffected;
         }
 
+
         public int SubmitFeedback(string feedback)
         {
-            string quary = $"insert into feedback(content) Values(@feedback)";
+            string quary = $"insert into feedback (feedbacktext, UserID) Values(@feedback, @userid)";
 
             int rowAffected;
             using (var coon = new SqlConnection(_configuration.GetConnectionString("MyConn")))
@@ -112,7 +117,7 @@ namespace QuizProject.Dao
                 coon.Open();
                 var cmd = new SqlCommand(quary, coon);
                 cmd.Parameters.AddWithValue("@feedback", feedback);
-
+                cmd.Parameters.AddWithValue("@userid", int.Parse(_cache.Get<string>("userId")));
                 rowAffected = cmd.ExecuteNonQuery();
             }
             return rowAffected;

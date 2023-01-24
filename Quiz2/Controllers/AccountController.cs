@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Quiz2.Models.DBEntities;
@@ -91,10 +92,13 @@ namespace CookieAuthenticationExample.Controllers
         [HttpGet]
         [Route("AccountController/GoFeedbackView")]
 
+        [Authorize]
         public IActionResult GoFeedbackView()
         {
             return View("Feedback");
         }
+
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> SubmitFeedback(string feedback)
         {
@@ -103,6 +107,8 @@ namespace CookieAuthenticationExample.Controllers
 
             return View("Index");
         }
+
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> SubmitFeedback()
         {
