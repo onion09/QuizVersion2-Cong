@@ -7,24 +7,24 @@
 {
     <form method="post" action="@Url.Action("HandleSelection", "Quiz")">
         <div id="questionContainer">
-             <h2>@Model.UserFullName</h2>
-            <h2>Category name: @Model.QuizCategory</h2>
-            <h2>started at: @Model.sessionLog.StartTime.ToString("HH:mm:ss")</h2>
-            <h2>ended at: @Model.sessionLog.EndTime</h2>
+             <h2>@Model.UserFullName Here is your Quiz Result</h2>
+            <h3>Category name: @Model.QuizCategory</h3>
+            <h3>started at: @Model.sessionLog.StartTime.ToString("HH:mm:ss")</h3>
+            <h3>ended at: @Model.sessionLog.EndTime</h3>
             <ul>
                 @foreach (var item in Model.questionResultMap)
                 {
-                    <p>@item.Key, @item.Value.Question.QuesContent</p>
+                    <h5>@item.Key, @item.Value.Question.QuesContent</h5>
                     @foreach(var option in item.Value.Question.Options)
                     {
                         <p>&#9830 @option.OptionValue,    @option.ShouldChoose</p>
                     }
-                    <p>Your Answer: @item.Value.Answer </p>
-                    <p>@item.Value.IsCorrect </p>
+                    <h5>Your Answer: @item.Value.Answer </h5>
+                    <h5>@item.Value.IsCorrect </h5>
                 }
 
-                <h2>Score: Your Score is @Model.sessionLog.Score</h2>
-                <h2>PassStatus: @Model.PassContiditon</h2>
+                <h3>Score: Your Score is @Model.sessionLog.Score</h3>
+                <h3>PassStatus: @Model.PassContiditon</h3>
 
             </ul>
         </div>
