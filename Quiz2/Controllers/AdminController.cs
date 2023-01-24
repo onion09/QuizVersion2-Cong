@@ -6,10 +6,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using QuizProject.Dao;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Quiz2.Controllers
 {
     [Route("AdminController")]
+    [Authorize]
+    [Authorize(Policy = "AdminOnly")]
     public class AdminController : Controller
 
     {

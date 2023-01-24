@@ -20,6 +20,11 @@ namespace Quiz2
                 options.AccessDeniedPath = "/Account/AccessDenied";
                 options.ExpireTimeSpan = TimeSpan.FromSeconds(1000); //set the cookie expiriation time
             });
+            builder.Services.AddAuthorization(options =>
+            {
+                //Add a policy called HROnly, so the page 
+                options.AddPolicy("AdminOnly", policy => policy.RequireClaim("Role", "Admin"));
+            });
             builder.Services.AddControllers();
             builder.Services.AddControllersWithViews();
             builder.Services.AddMemoryCache(options =>
