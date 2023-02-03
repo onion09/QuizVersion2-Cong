@@ -18,6 +18,7 @@ namespace Quiz2.DAO
             _dbContext = dbContext;
             _cache = memoryCache;
         }
+        public QuestionDao() { }
 
         //Get random questions- options list based on categoryId. 
         public string BuildQuestionsByCategory(int categoryId)
@@ -59,7 +60,7 @@ namespace Quiz2.DAO
                 questions[n] = temp;
             }
         }
-        public List<Question> GetAllQuestions()
+        public virtual List<Question> GetAllQuestions()
         {
             var questions = _dbContext.Questions.Include(q => q.Options).Include(q => q.Category).ToList();
             return questions;
@@ -269,7 +270,7 @@ namespace Quiz2.DAO
             Option option = _dbContext.Options.Include(q => q.Question).ThenInclude(q => q.Options).Where(q => q.QuestionId == quesId).FirstOrDefault();
             return option;
         }
-        public Option GetOptionById(int optionId)
+        public virtual Option GetOptionById(int optionId)
         {
             Option option = _dbContext.Options.Include(o=>o.Question).Where(o=>o.OptionId== optionId).FirstOrDefault();
             return option;
