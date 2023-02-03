@@ -27,7 +27,7 @@ namespace QuizProject.Dao
             _dbContext = dbContext;
             _cache = memoryCache;
         }
-
+        public AccountDao() { }
         public string GetPermissionByUserName(string userName)
         {
             string result = "";

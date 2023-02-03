@@ -58,7 +58,7 @@ namespace Quiz2.Controllers
         }
 
         [HttpGet("[action]")]
-        public IActionResult GetAlQuestions()
+        public virtual IActionResult GetAlQuestions()
         {
             var allQuestions = _questionDao.GetAllQuestions();
             return View("AllQuestions", allQuestions);
@@ -167,10 +167,5 @@ namespace Quiz2.Controllers
             var accounts = _accountDao.GetAllAccounts();
             return View("AllUsers",accounts);  
         }
-
-
-
-
-
     }
 }
